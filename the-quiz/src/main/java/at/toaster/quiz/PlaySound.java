@@ -11,7 +11,7 @@ public class PlaySound extends File {
 
 	public PlaySound(String filename) {
 
-		super("res/" + filename);
+		super("src/main/resources/" + filename);
 
 		try {
 			sound = Applet.newAudioClip(this.toURI().toURL());
