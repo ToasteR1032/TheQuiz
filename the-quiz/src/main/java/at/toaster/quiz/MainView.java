@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
-
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
@@ -12,6 +11,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
+import at.toaster.quiz.data.QuestionSet;
 
 public class MainView extends JFrame {
 	private static final long serialVersionUID = 5581544918997956339L;
@@ -32,7 +33,9 @@ public class MainView extends JFrame {
 	private String answerText2;
 	private String answerText3;
 	private String answerText4;
-
+	private int qNumber;
+	private QuestionSet qSet;
+	
 	private JPanel answers;
 
 	private boolean player1Active = false;
