@@ -20,15 +20,19 @@ public class MainControl implements ActionListener{
 	public MainControl(MySQLConnector connector) {
 		this.connector = connector;
 		this.mModel = new MainModel();
+		
 		this.meModel = new MenuModel();
 		this.meView = new MenuView(meModel, this, connector);
-		this.mView = new MainView(mModel, this, meView.lSets.getSelectedIndex() + 1);
 	}
 	
+	public void initMainView() {
+		this.mView = new MainView(mModel, this, meView.lSets.getSelectedIndex() + 1);
+	}
 	public void actionPerformed (ActionEvent e) {
 		
 		//Menu
 		if (meView.bPlay(e)) {
+			this.initMainView();
 			meView.setVisible(false);
 			mView.setVisible(true);
 		}
