@@ -109,24 +109,25 @@ public class MainView extends JFrame{
 		btnFinalizeQuestionset.setBounds(12, 200, 189, 52);
 		contentPane.add(btnFinalizeQuestionset);
 		
+		JRadioButton radioButton_1 = new JRadioButton("Correct");
+		radioButton_1.setBounds(344, 60, 88, 22);
+		contentPane.add(radioButton_1);
+		radioButton_1.setSelected(true);
+		
+		rButtons.add(radioButton_1);
+		
+		JRadioButton radioButton_2 = new JRadioButton("Correct");
+		radioButton_2.setBounds(344, 93, 88, 22);
+		contentPane.add(radioButton_2);
+		rButtons.add(radioButton_2);
+		
 		JRadioButton radioButton_3 = new JRadioButton("Correct");
-		radioButton_3.setBounds(344, 59, 88, 22);
+		radioButton_3.setBounds(344, 127, 88, 22);
 		contentPane.add(radioButton_3);
 		
 		JRadioButton radioButton_4 = new JRadioButton("Correct");
-		radioButton_4.setBounds(344, 92, 88, 22);
+		radioButton_4.setBounds(344, 162, 88, 22);
 		contentPane.add(radioButton_4);
-		
-		JRadioButton radioButton_1 = new JRadioButton("Correct");
-		radioButton_1.setBounds(344, 126, 88, 22);
-		contentPane.add(radioButton_1);
-		
-		JRadioButton radioButton_2 = new JRadioButton("Correct");
-		radioButton_2.setBounds(344, 161, 88, 22);
-		contentPane.add(radioButton_2);
-		
-		rButtons.add(radioButton_1);
-		rButtons.add(radioButton_2);
 		rButtons.add(radioButton_3);
 		rButtons.add(radioButton_4);
 		
