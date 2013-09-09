@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,10 +14,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import org.apache.log4j.Logger;
+
+import at.toaster.quiz.data.Question;
 import at.toaster.quiz.data.QuestionSet;
+import at.toaster.quiz.data.QuestionSetHandling;
 
 public class MainView extends JFrame {
 	private static final long serialVersionUID = 5581544918997956339L;
+	private static final Logger LOG = Logger.getLogger(MainView.class);
+	
 	private MainModel mModel;
 	private MainControl mControl;
 
@@ -35,7 +43,7 @@ public class MainView extends JFrame {
 	private String answerText4;
 	private int qNumber;
 	private QuestionSet qSet;
-	
+
 	private JPanel answers;
 
 	private boolean player1Active = false;
@@ -56,20 +64,29 @@ public class MainView extends JFrame {
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-		Font question = new Font(null, Font.PLAIN, 40);
+		
+		this.qNumber = 0;
+		
+		try {
+			this.qSet = QuestionSetHandling.getQuestionSet(mControl.connector.getConnection(), 1);
+		} catch (Exception e) {
+			LOG.error("Connection Error occurred: " + e);
+		}
+		
+		Question question = qSet.getQuestions().get(qNumber);
+		
+		Font question_font = new Font(null, Font.PLAIN, 40);
 		Font question_small = new Font(null, Font.PLAIN, 30);
 		Font question_verysmall = new Font(null, Font.PLAIN, 20);
 		Font answer = new Font(null, Font.PLAIN, 25);
 
 		this.buzzer = new PlaySound("buzzer.wav");
 
-		// FIXME: HARDCODED - TESTING ONLY!
-		this.setQuestionText("Question?");
-		this.setAnswerText1("Answer 1");
-		this.setAnswerText2("Answer 2");
-		this.setAnswerText3("Answer 3");
-		this.setAnswerText4("Answer 4");
+		this.setQuestionText(question.getQuestionText());
+		this.setAnswerText1(question.getAnswer1().getText());
+		this.setAnswerText2(question.getAnswer2().getText());
+		this.setAnswerText3(question.getAnswer3().getText());
+		this.setAnswerText4(question.getAnswer4().getText());
 
 		this.timer1 = new Timer(1000, new TimerListener(this, 1));
 		this.timer2 = new Timer(1000, new TimerListener(this, 2));
@@ -86,7 +103,7 @@ public class MainView extends JFrame {
 		} else if (this.getQuestionText().length() > 27) {
 			lQuestion.setFont(question_small);
 		} else
-			lQuestion.setFont(question);
+			lQuestion.setFont(question_font);
 
 		lAnswer1 = new JLabel("1) " + answerText1, JLabel.CENTER);
 		lAnswer1.setFont(answer);
@@ -101,10 +118,10 @@ public class MainView extends JFrame {
 		lAnswer4.setFont(answer);
 
 		bPlayer1 = new JButton("X");
-		bPlayer1.setFont(question);
+		bPlayer1.setFont(question_font);
 
 		bPlayer2 = new JButton("X");
-		bPlayer2.setFont(question);
+		bPlayer2.setFont(question_font);
 
 		answers = new JPanel();
 
@@ -233,7 +250,11 @@ public class MainView extends JFrame {
 	public void answer4() {
 
 	}
-
+	
+	public void nextQuestion() {
+		
+	}
+	
 	public boolean bPlayer1(ActionEvent e) {
 		if (e.getSource() == this.bPlayer1)
 			return true;

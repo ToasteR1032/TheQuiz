@@ -13,10 +13,12 @@ public class MainControl implements ActionListener{
 	private MainModel mModel;
 	private MenuModel meModel;
 	private MenuView meView;
+	public MySQLConnector connector;
 	
 	private static final Logger LOG = Logger.getLogger(MainControl.class);
 	
-	public MainControl() {
+	public MainControl(MySQLConnector connector) {
+		this.connector = connector;
 		this.mModel = new MainModel();
 		this.mView = new MainView(mModel, this);
 		this.meModel = new MenuModel();

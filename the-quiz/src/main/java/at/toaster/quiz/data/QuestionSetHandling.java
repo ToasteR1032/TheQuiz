@@ -14,7 +14,7 @@ public class QuestionSetHandling {
 	public static QuestionSet readSet(String base64object)
 			throws ClassNotFoundException, IOException {
 
-		byte b[] = base64object.getBytes();
+		byte b[] = Base64Coder.decode(base64object);
 
 		ByteArrayInputStream bi = new ByteArrayInputStream(b);
 		ObjectInputStream si = new ObjectInputStream(bi);
@@ -36,7 +36,7 @@ public class QuestionSetHandling {
 	
 	public static QuestionSet getQuestionSet(Connection connection, int id) throws SQLException, ClassNotFoundException, IOException {
 		
-		ResultSet result = connection.createStatement().executeQuery("SELECT content FROM questionset WHERE id=" + id);
+		ResultSet result = connection.createStatement().executeQuery("SELECT content FROM questionsets WHERE id=" + id);
 		
 		result.next();
 		String content = result.getString("content");

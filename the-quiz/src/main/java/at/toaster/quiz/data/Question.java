@@ -15,7 +15,7 @@ public class Question implements Serializable {
 
 	public Question(String questionText, Answer answer1, Answer answer2,
 			Answer answer3, Answer answer4) {
-
+		
 		this.answer1 = answer1;
 		this.answer2 = answer2;
 		this.answer3 = answer3;

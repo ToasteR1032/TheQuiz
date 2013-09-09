@@ -43,7 +43,7 @@ public class Buzzers implements KeyListener {
 		
 		//Skip Question
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			
+			mView.nextQuestion();
 		}
 	}
 

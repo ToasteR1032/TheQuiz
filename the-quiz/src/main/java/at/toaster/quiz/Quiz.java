@@ -7,8 +7,8 @@ public class Quiz {
 	public static void main (String[] args) {
 		
 		MySQLConnector connector = new MySQLConnector("80.241.220.222", "quiz", "quiz", "quiz");
-		
+
 		LOG.debug("Starting programm...");
-		new MainControl();
+		new MainControl(connector);
 	}
 }
