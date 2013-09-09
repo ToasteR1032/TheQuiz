@@ -22,7 +22,7 @@ public class TimerListener implements ActionListener{
 			mView.bPlayer1.setText(value+"");
 			
 			if (value == 0) {
-				mView.player1Finished();
+				mView.timeUp1();
 				mView.timer1.stop();
 				value = 3;
 			}
@@ -33,7 +33,7 @@ public class TimerListener implements ActionListener{
 			mView.bPlayer2.setText(value+"");
 			
 			if (value == 0) {
-				mView.player2Finished();
+				mView.timeUp2();
 				mView.timer2.stop();
 				value = 3;
 			}

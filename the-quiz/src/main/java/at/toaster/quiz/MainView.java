@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -23,7 +24,7 @@ import at.toaster.quiz.data.QuestionSetHandling;
 public class MainView extends JFrame {
 	private static final long serialVersionUID = 5581544918997956339L;
 	private static final Logger LOG = Logger.getLogger(MainView.class);
-	
+
 	private MainModel mModel;
 	private MainControl mControl;
 
@@ -36,13 +37,9 @@ public class MainView extends JFrame {
 	public JButton bPlayer1;
 	public JButton bPlayer2;
 
-	private String questionText;
-	private String answerText1;
-	private String answerText2;
-	private String answerText3;
-	private String answerText4;
 	private int qNumber;
 	private QuestionSet qSet;
+	private Question question;
 
 	private JPanel answers;
 
@@ -54,7 +51,15 @@ public class MainView extends JFrame {
 	public Timer timer1;
 	public Timer timer2;
 
-	public MainView(MainModel mModel, MainControl mControl) {
+	private int points1 = 0;
+	private int points2 = 0;
+
+	Font question_font = new Font(null, Font.PLAIN, 40);
+	Font question_small = new Font(null, Font.PLAIN, 30);
+	Font question_verysmall = new Font(null, Font.PLAIN, 20);
+	Font answer = new Font(null, Font.PLAIN, 25);
+
+	public MainView(MainModel mModel, MainControl mControl, int questionSetID) {
 		super("Quiz");
 		this.mModel = mModel;
 		this.mControl = mControl;
@@ -64,64 +69,44 @@ public class MainView extends JFrame {
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
-		this.qNumber = 0;
-		
+
+		this.qNumber = -1;
+
 		try {
-			this.qSet = QuestionSetHandling.getQuestionSet(mControl.connector.getConnection(), 1);
+			this.qSet = QuestionSetHandling.getQuestionSet(
+					mControl.connector.getConnection(), questionSetID);
 		} catch (Exception e) {
 			LOG.error("Connection Error occurred: " + e);
 		}
-		
-		Question question = qSet.getQuestions().get(qNumber);
-		
-		Font question_font = new Font(null, Font.PLAIN, 40);
-		Font question_small = new Font(null, Font.PLAIN, 30);
-		Font question_verysmall = new Font(null, Font.PLAIN, 20);
-		Font answer = new Font(null, Font.PLAIN, 25);
 
 		this.buzzer = new PlaySound("buzzer.wav");
-
-		this.setQuestionText(question.getQuestionText());
-		this.setAnswerText1(question.getAnswer1().getText());
-		this.setAnswerText2(question.getAnswer2().getText());
-		this.setAnswerText3(question.getAnswer3().getText());
-		this.setAnswerText4(question.getAnswer4().getText());
 
 		this.timer1 = new Timer(1000, new TimerListener(this, 1));
 		this.timer2 = new Timer(1000, new TimerListener(this, 2));
 
 		// Layout
 
-		lQuestion = new JLabel(questionText, JLabel.CENTER);
+		lQuestion = new JLabel("Question", JLabel.CENTER);
 
-		// Changing font size of question label, so longer texts still fit
-		if (this.getQuestionText().length() > 46) {
-			lQuestion.setFont(question_verysmall);
-		} else if (this.getQuestionText().length() > 38) {
-			lQuestion.setFont(answer);
-		} else if (this.getQuestionText().length() > 27) {
-			lQuestion.setFont(question_small);
-		} else
-			lQuestion.setFont(question_font);
-
-		lAnswer1 = new JLabel("1) " + answerText1, JLabel.CENTER);
+		lAnswer1 = new JLabel("1)", JLabel.CENTER);
 		lAnswer1.setFont(answer);
 
-		lAnswer2 = new JLabel("2) " + answerText2, JLabel.CENTER);
+		lAnswer2 = new JLabel("2)", JLabel.CENTER);
 		lAnswer2.setFont(answer);
 
-		lAnswer3 = new JLabel("3) " + answerText3, JLabel.CENTER);
+		lAnswer3 = new JLabel("3)", JLabel.CENTER);
 		lAnswer3.setFont(answer);
 
-		lAnswer4 = new JLabel("4) " + answerText4, JLabel.CENTER);
+		lAnswer4 = new JLabel("4)", JLabel.CENTER);
 		lAnswer4.setFont(answer);
 
-		bPlayer1 = new JButton("X");
+		bPlayer1 = new JButton(points1+"");
 		bPlayer1.setFont(question_font);
+		bPlayer1.setFocusable(false);
 
-		bPlayer2 = new JButton("X");
+		bPlayer2 = new JButton(points2+"");
 		bPlayer2.setFont(question_font);
+		bPlayer2.setFocusable(false);
 
 		answers = new JPanel();
 
@@ -147,46 +132,8 @@ public class MainView extends JFrame {
 		bPlayer1.addKeyListener(buzzers);
 		bPlayer2.addKeyListener(buzzers);
 
-	}
+		this.nextQuestion();
 
-	public String getQuestionText() {
-		return questionText;
-	}
-
-	public void setQuestionText(String questionText) {
-		this.questionText = questionText;
-	}
-
-	public String getAnswerText1() {
-		return answerText1;
-	}
-
-	public void setAnswerText1(String answerText1) {
-		this.answerText1 = answerText1;
-	}
-
-	public String getAnswerText2() {
-		return answerText2;
-	}
-
-	public void setAnswerText2(String answerText2) {
-		this.answerText2 = answerText2;
-	}
-
-	public String getAnswerText3() {
-		return answerText3;
-	}
-
-	public void setAnswerText3(String answerText3) {
-		this.answerText3 = answerText3;
-	}
-
-	public String getAnswerText4() {
-		return answerText4;
-	}
-
-	public void setAnswerText4(String answerText4) {
-		this.answerText4 = answerText4;
 	}
 
 	public void player1() {
@@ -223,7 +170,7 @@ public class MainView extends JFrame {
 		this.bPlayer1.setBackground(null);
 		this.bPlayer2.setEnabled(true);
 
-		this.bPlayer1.setText("X");
+		this.bPlayer1.setText(points1 + "");
 	}
 
 	public void player2Finished() {
@@ -232,29 +179,178 @@ public class MainView extends JFrame {
 		this.bPlayer2.setBackground(null);
 		this.bPlayer1.setEnabled(true);
 
-		this.bPlayer2.setText("X");
+		this.bPlayer2.setText(points2 + "");
 	}
 
 	public void answer1() {
+		if (player1Active) {
+			if (question.getAnswer1().isCorrect()) {
+				points1++;
+				this.bPlayer1.setText(points1+"");
+			} else {
+				points2++;
+				this.bPlayer2.setText(points2+"");
+			} 
+			timer1.stop();
+			player1Finished();
+			nextQuestion();
+		}
 		
+		if (player2Active) {
+			if (question.getAnswer1().isCorrect()) {
+				points2++;
+				this.bPlayer2.setText(points2+"");
+			} else {
+				points1++;
+				this.bPlayer1.setText(points1+"");
+			}
+			timer2.stop();
+			player2Finished();
+			nextQuestion();
+		}
 	}
 
 	public void answer2() {
-
+		if (player1Active) {
+			if (question.getAnswer2().isCorrect()) {
+				points1++;
+				this.bPlayer1.setText(points1+"");
+			} else {
+				points2++;
+				this.bPlayer2.setText(points2+"");
+			}
+			timer1.stop();
+			player1Finished();
+			nextQuestion();
+		}
+		
+		if (player2Active) {
+			if (question.getAnswer2().isCorrect()) {
+				points2++;
+				this.bPlayer2.setText(points2+"");
+			} else {
+				points1++;
+				this.bPlayer1.setText(points1+"");
+			}
+			timer2.stop();
+			player2Finished();
+			nextQuestion();
+		}
 	}
 
 	public void answer3() {
-
+		if (player1Active) {
+			if (question.getAnswer3().isCorrect()) {
+				points1++;
+				this.bPlayer1.setText(points1+"");
+			} else {
+				points2++;
+				this.bPlayer2.setText(points2+"");
+			}
+			timer1.stop();
+			player1Finished();
+			nextQuestion();
+		}
+		
+		if (player2Active) {
+			if (question.getAnswer3().isCorrect()) {
+				points2++;
+				this.bPlayer2.setText(points2+"");
+			} else {
+				points1++;
+				this.bPlayer1.setText(points1+"");
+			}
+			timer2.stop();
+			player2Finished();
+			nextQuestion();
+		}
 	}
 
 	public void answer4() {
+		if (player1Active) {
+			if (question.getAnswer4().isCorrect()) {
+				points1++;
+				this.bPlayer1.setText(points1+"");
+			} else {
+				points2++;
+				this.bPlayer2.setText(points2+"");
+			} 
+			timer1.stop();
+			player1Finished();
+			nextQuestion();
+		}
+		
+		if (player2Active) {
+			if (question.getAnswer4().isCorrect()) {
+				points2++;
+				this.bPlayer2.setText(points2+"");
+			} else {
+				points1++;
+				this.bPlayer1.setText(points1+"");
+			} 
+			timer2.stop();
+			player2Finished();
+			nextQuestion();
+		}
+	}
+
+	public void nextQuestion() {
+		if (player1Active || player2Active) return;
+		
+		this.qNumber++;
+
+		if (qSet.getQuestions().size() == this.qNumber) {
+			this.end();
+			return;
+		}
+
+		question = qSet.getQuestions().get(qNumber);
+
+		this.lQuestion.setText(question.getQuestionText());
+		this.lAnswer1.setText("1) " + question.getAnswer1().getText());
+		this.lAnswer2.setText("2) " + question.getAnswer2().getText());
+		this.lAnswer3.setText("3) " + question.getAnswer3().getText());
+		this.lAnswer4.setText("4) " + question.getAnswer4().getText());
+
+		// Changing font size of question label, so longer texts still fit
+		if (this.lQuestion.getText().length() > 46) {
+			lQuestion.setFont(question_verysmall);
+		} else if (this.lQuestion.getText().length() > 38) {
+			lQuestion.setFont(answer);
+		} else if (this.lQuestion.getText().length() > 27) {
+			lQuestion.setFont(question_small);
+		} else
+			lQuestion.setFont(question_font);
 
 	}
 	
-	public void nextQuestion() {
+	public void timeUp1() {
+		player1Finished();
+		points2++;
+		this.bPlayer2.setText(points2+"");
+		nextQuestion();
 		
 	}
 	
+	public void timeUp2() {
+		player2Finished();
+		points1++;
+		this.bPlayer1.setText(points1+"");
+		nextQuestion();
+	}
+	
+	public void end() {
+		if (points1 > points2) {
+			JOptionPane.showMessageDialog(null, "GAME OVER!\nPlayer 1 wins!");
+		} else if (points1 < points2) {
+			JOptionPane.showMessageDialog(null, "GAME OVER!\nPlayer 2 wins!");
+		} else {
+			JOptionPane.showMessageDialog(null, "GAME OVER!\nIt's a tie!");
+		}
+		
+		System.exit(0);
+	}
+
 	public boolean bPlayer1(ActionEvent e) {
 		if (e.getSource() == this.bPlayer1)
 			return true;
