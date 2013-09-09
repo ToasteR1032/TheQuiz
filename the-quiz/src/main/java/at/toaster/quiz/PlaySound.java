@@ -20,7 +20,7 @@ public class PlaySound extends File {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void play() {
 		sound.play();
 	}
