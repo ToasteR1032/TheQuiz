@@ -1,6 +1,7 @@
 package at.toaster.quizuploader;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -12,11 +13,19 @@ import javax.swing.UIManager;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
+import at.toaster.quiz.data.Answer;
+import at.toaster.quiz.data.Question;
+
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 
 public class MainView extends JFrame{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private MainControl mControl;
 	
 	private JPanel contentPane;
@@ -25,6 +34,12 @@ public class MainView extends JFrame{
 	private JTextField textField_2;
 	private JTextField textField_3;
 	private JTextField textField_4;
+	
+	private JRadioButton radioButton_1;
+	private JRadioButton radioButton_2;
+	private JRadioButton radioButton_3;
+	private JRadioButton radioButton_4;
+	private ButtonGroup rButtons;
 	
 	private JButton btnSaveAndNext;
 	private JButton btnFinalizeQuestionset;
@@ -46,7 +61,25 @@ public class MainView extends JFrame{
 	}
 	
 	public void save() {
+		Answer a1 = new Answer(this.textField_1.getText(), this.radioButton_1.isSelected());
+		Answer a2 = new Answer(this.textField_2.getText(), this.radioButton_2.isSelected());
+		Answer a3 = new Answer(this.textField_3.getText(), this.radioButton_3.isSelected());
+		Answer a4 = new Answer(this.textField_4.getText(), this.radioButton_4.isSelected());
 		
+		mControl.questions.add(new Question(this.textField.getText(), a1, a2, a3, a4));
+		
+		this.textField.setText("");
+		this.textField_1.setText("");
+		this.textField_2.setText("");
+		this.textField_3.setText("");
+		this.textField_4.setText("");
+		
+		this.radioButton_2.setSelected(false);
+		this.radioButton_3.setSelected(false);
+		this.radioButton_4.setSelected(false);
+		this.radioButton_1.setSelected(true);
+		
+		this.textField.requestFocus();
 	}
 	
 	public boolean bSave(ActionEvent e) {
@@ -81,7 +114,7 @@ public class MainView extends JFrame{
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 		
-		ButtonGroup rButtons = new ButtonGroup();
+		rButtons = new ButtonGroup();
 		
 		textField_2 = new JTextField();
 		textField_2.setColumns(10);
@@ -106,23 +139,23 @@ public class MainView extends JFrame{
 		btnFinalizeQuestionset.setBounds(12, 200, 189, 31);
 		contentPane.add(btnFinalizeQuestionset);
 		
-		JRadioButton radioButton_1 = new JRadioButton("Correct");
+		radioButton_1 = new JRadioButton("Correct");
 		radioButton_1.setBounds(344, 60, 88, 22);
 		contentPane.add(radioButton_1);
 		radioButton_1.setSelected(true);
 		
 		rButtons.add(radioButton_1);
 		
-		JRadioButton radioButton_2 = new JRadioButton("Correct");
+		radioButton_2 = new JRadioButton("Correct");
 		radioButton_2.setBounds(344, 93, 88, 22);
 		contentPane.add(radioButton_2);
 		rButtons.add(radioButton_2);
 		
-		JRadioButton radioButton_3 = new JRadioButton("Correct");
+		radioButton_3 = new JRadioButton("Correct");
 		radioButton_3.setBounds(344, 127, 88, 22);
 		contentPane.add(radioButton_3);
 		
-		JRadioButton radioButton_4 = new JRadioButton("Correct");
+		radioButton_4 = new JRadioButton("Correct");
 		radioButton_4.setBounds(344, 162, 88, 22);
 		contentPane.add(radioButton_4);
 		rButtons.add(radioButton_3);

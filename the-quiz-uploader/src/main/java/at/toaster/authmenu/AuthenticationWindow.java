@@ -2,6 +2,8 @@ package at.toaster.authmenu;
 
 import javax.swing.JFrame;
 
+import at.toaster.quiz.data.QuestionSet;
+import at.toaster.quiz.data.QuestionSetHandling;
 import at.toaster.quizuploader.MainControl;
 
 import javax.swing.JLabel;
@@ -15,8 +17,12 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 
 public class AuthenticationWindow extends JFrame {
 	/**
@@ -36,8 +42,8 @@ public class AuthenticationWindow extends JFrame {
 		initGUI();
 	}
 
-	public void save() {
-
+	public void save() throws MalformedURLException, UnsupportedEncodingException, IOException {
+		QuestionSetHandling.postQuestionSet(this.tfUserName.getText(), String.valueOf(this.tfPassword.getPassword()), this.tfSetName.getText(), new QuestionSet(this.tfSetName.getText(), mControl.questions));
 	}
 
 	public boolean bSave(ActionEvent e) {
