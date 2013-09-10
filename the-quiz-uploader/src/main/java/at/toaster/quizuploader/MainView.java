@@ -41,6 +41,7 @@ public class MainView extends JFrame{
 		btnFinalizeQuestionset.addActionListener(mControl);
 		
 		this.getRootPane().setDefaultButton(btnSaveAndNext);
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{textField, textField_1, textField_2, textField_3, textField_4}));
 		this.setVisible(true);
 	}
 	
@@ -102,11 +103,11 @@ public class MainView extends JFrame{
 		contentPane.add(textField_4);
 		
 		btnSaveAndNext = new JButton("next Question");
-		btnSaveAndNext.setBounds(204, 200, 216, 52);
+		btnSaveAndNext.setBounds(204, 200, 216, 31);
 		contentPane.add(btnSaveAndNext);
 		
 		btnFinalizeQuestionset = new JButton("finalize Questionset");
-		btnFinalizeQuestionset.setBounds(12, 200, 189, 52);
+		btnFinalizeQuestionset.setBounds(12, 200, 189, 31);
 		contentPane.add(btnFinalizeQuestionset);
 		
 		JRadioButton radioButton_1 = new JRadioButton("Correct");
@@ -154,6 +155,5 @@ public class MainView extends JFrame{
 		JSeparator separator = new JSeparator();
 		separator.setBounds(15, 51, 405, 2);
 		contentPane.add(separator);
-		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{textField, textField_1, textField_2, textField_3, textField_4, btnSaveAndNext, btnFinalizeQuestionset}));
 	}
 }
