@@ -7,6 +7,7 @@ import at.toaster.quiz.data.QuestionSetHandling;
 import at.toaster.quizuploader.MainControl;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
@@ -14,6 +15,7 @@ import javax.swing.JSeparator;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import java.awt.Component;
+import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
@@ -42,8 +44,26 @@ public class AuthenticationWindow extends JFrame {
 		initGUI();
 	}
 
-	public void save() throws MalformedURLException, UnsupportedEncodingException, IOException {
-		QuestionSetHandling.postQuestionSet(this.tfUserName.getText(), String.valueOf(this.tfPassword.getPassword()), this.tfSetName.getText(), new QuestionSet(this.tfSetName.getText(), mControl.questions));
+	public void save() throws MalformedURLException,
+			UnsupportedEncodingException, IOException {
+		if (this.tfSetName.getText().isEmpty()
+				|| this.tfUserName.getText().isEmpty()
+				|| String.valueOf(this.tfPassword.getPassword()).isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Empty Fields", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		if (QuestionSetHandling.postQuestionSet(this.tfUserName.getText(),
+				String.valueOf(this.tfPassword.getPassword()),
+				this.tfSetName.getText(),
+				new QuestionSet(this.tfSetName.getText(), mControl.questions))) {
+			JOptionPane.showMessageDialog(null, "Question Set saved");
+		} else {
+			JOptionPane.showMessageDialog(null, "Failed to save Question Set",
+					"Error", JOptionPane.ERROR_MESSAGE);
+		}
+
 	}
 
 	public boolean bSave(ActionEvent e) {

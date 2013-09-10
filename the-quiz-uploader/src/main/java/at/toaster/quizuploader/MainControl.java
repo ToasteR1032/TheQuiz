@@ -28,9 +28,10 @@ public class MainControl implements ActionListener {
 		}
 		
 		if (mView.bFinalize(e)) {
-			mView.save();
-			mView.setVisible(false);
-			aView.setVisible(true);
+			if (mView.save()) {
+				mView.setVisible(false);
+				aView.setVisible(true);
+			}
 		}
 		
 		//Authentication Window
