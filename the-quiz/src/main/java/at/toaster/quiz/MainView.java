@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,6 +19,7 @@ import at.toaster.quiz.data.Question;
 import at.toaster.quiz.data.QuestionSet;
 import at.toaster.quiz.data.QuestionSetHandling;
 
+@SuppressWarnings("unused")
 public class MainView extends JFrame {
 	private static final long serialVersionUID = 5581544918997956339L;
 	private static final Logger LOG = Logger.getLogger(MainView.class);
@@ -73,8 +72,7 @@ public class MainView extends JFrame {
 		this.qNumber = -1;
 
 		try {
-			this.qSet = QuestionSetHandling.getQuestionSet(
-					mControl.connector.getConnection(), questionSetID);
+			this.qSet = QuestionSetHandling.getQuestionSet(questionSetID);
 		} catch (Exception e) {
 			LOG.error("Connection Error occurred: " + e);
 		}

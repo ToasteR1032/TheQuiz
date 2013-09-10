@@ -1,40 +1,47 @@
 package at.toaster.quiz;
-import java.sql.Connection;
 
-import at.toaster.quiz.data.QuestionSet;
+import java.util.ArrayList;
+
+import at.toaster.quiz.data.Answer;
 import at.toaster.quiz.data.ObjectSerialization;
-import at.toaster.quiz.data.QuestionSetHandling;
+import at.toaster.quiz.data.Question;
+import at.toaster.quiz.data.QuestionSet;
 
 public class Testing {
 
 	public static void main(String[] args) {
 
-		MySQLConnector connector = new MySQLConnector("80.241.220.222", "quiz",
-				"quiz", "quiz");
-		new Testing(connector.getConnection());
+		new Testing();
 
 	}
 
-	public Testing(Connection connection) {
-		
-		/*
+	public Testing() {
 		
 		ArrayList<Question> questions = new ArrayList<Question>();
 
-		Answer a1 = new Answer("1", true);
-		Answer a2 = new Answer("2", false);
-		Answer a3 = new Answer("3", false);
-		Answer a4 = new Answer("4", false);
+		Answer a1 = new Answer("A", true);
+		Answer a2 = new Answer("B", false);
+		Answer a3 = new Answer("C", false);
+		Answer a4 = new Answer("D", false);
 
-		Question question = new Question("1, 2, 3 oder 4", a1, a2, a3, a4);
+		Question question1 = new Question("A, B, C oder D?", a1, a2, a3, a4);
 
-		questions.add(question);
+		questions.add(question1);
+		
+		Answer a5 = new Answer("E", false);
+		Answer a6 = new Answer("F", false);
+		Answer a7 = new Answer("G", false);
+		Answer a8 = new Answer("H", true);
 
-		QuestionSet set = new QuestionSet("Test", questions);
+		Question question2 = new Question("E, F, G oder H?", a5, a6, a7, a8);
+
+		questions.add(question2);
+
+		QuestionSet set = new QuestionSet("Buchstaben", questions);
 
 		System.out.println(ObjectSerialization.OToS(set));
 
-		*/
+		/*
 		
 		try {
 			QuestionSet qs = QuestionSetHandling.getQuestionSet(connection, 1);
@@ -43,7 +50,7 @@ public class Testing {
 			e.printStackTrace();
 		}
 
-
+	*/
 
 	}
 }
