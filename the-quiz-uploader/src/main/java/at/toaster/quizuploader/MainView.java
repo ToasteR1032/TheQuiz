@@ -49,10 +49,6 @@ public class MainView extends JFrame{
 		
 	}
 	
-	public void finalize() {
-		
-	}
-	
 	public boolean bSave(ActionEvent e) {
 		if (e.getSource() == this.btnSaveAndNext)
 			return true;
